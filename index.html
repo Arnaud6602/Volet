@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Générateur PRO Tuya – Volets</title>
+
+<style>
+body{
+    font-family:-apple-system, BlinkMacSystemFont, sans-serif;
+    background:#f2f4f7;
+    margin:0;
+    padding:12px;
+}
+h1{font-size:22px;margin:10px 0;}
+h2{font-size:18px;margin-top:25px;}
+.box{
+    background:#fff;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+label{display:block;margin:6px 0;}
+input[type=number]{
+    width:100%;
+    padding:8px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+button{
+    margin-top:10px;
+    padding:12px;
+    width:100%;
+    border:none;
+    border-radius:10px;
+    background:#007aff;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+}
+.check{margin-right:8px;}
+.small{font-size:13px;color:#555}
+.footer{text-align:center;font-size:12px;color:#888;margin-top:20px}
+</style>
+</head>
+
+<body>
+
+<h1>🧠 Générateur PRO – Installation Tuya Volets</h1>
+
+<div class="box">
+<h2>1️⃣ Paramètres maison</h2>
+
+<label>Nombre total de volets :
+<input type="number" id="volets" value="8" min="1"></label>
+
+<label>Nombre de baies vitrées :
+<input type="number" id="baies" value="1" min="0"></label>
+
+<button onclick="generate()">Générer le plan chantier</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+function generate(){
+
+let v = parseInt(document.getElementById("volets").value);
+let b = parseInt(document.getElementById("baies").value);
+let html = "";
+
+/* SCENES */
+html += `<div class="box"><h2>2️⃣ Scènes internes à créer</h2>`;
+for(let i=1;i<=v;i++){
+    html += `<label><input type="checkbox" class="check"> O${i} – Volet ${i} → Ouvrir</label>`;
+    html += `<label><input type="checkbox" class="check"> F${i} – Volet ${i} → Fermer</label>`;
+}
+html += `</div>`;
+
+/* AUTOMATISATIONS */
+html += `<div class="box"><h2>3️⃣ Automatisations à créer</h2>
+<label><input type="checkbox" class="check"> Lever du soleil → O1 à O${v}</label>
+<label><input type="checkbox" class="check"> Coucher du soleil → F1 à F${v}</label>
+<label><input type="checkbox" class="check"> Mode Nuit → F1 à F${v}</label>
+</div>`;
+
+/* MODES */
+html += `<div class="box"><h2>4️⃣ Scènes visibles client (modes)</h2>
+<label><input type="checkbox" class="check"> Mode Normal</label>
+<label><input type="checkbox" class="check"> Mode Vacances</label>
+<label><input type="checkbox" class="check"> Mode Nuit</label>
+<label><input type="checkbox" class="check"> Je pars</label>
+</div>`;
+
+/* LOGIQUE */
+html += `<div class="box"><h2>5️⃣ Logique métier</h2>
+<div class="small">✔ Mode Normal : ouverture matin / fermeture soir</div>
+<div class="small">✔ Mode Vacances : ouverture + fermeture automatiques complètes</div>
+<div class="small">✔ Mode Nuit : fermeture immédiate tous volets</div>
+<div class="small">✔ Lever du soleil restaure automatiquement le Mode Normal</div>
+</div>`;
+
+/* CHECKLIST */
+html += `<div class="box"><h2>6️⃣ Checklist chantier</h2>
+<label><input type="checkbox" class="check"> Modules appairés</label>
+<label><input type="checkbox" class="check"> Nommage volets OK</label>
+<label><input type="checkbox" class="check"> Scènes O créées</label>
+<label><input type="checkbox" class="check"> Scènes F créées</label>
+<label><input type="checkbox" class="check"> Automatisation matin</label>
+<label><input type="checkbox" class="check"> Automatisation soir</label>
+<label><input type="checkbox" class="check"> Test ouverture général</label>
+<label><input type="checkbox" class="check"> Test fermeture général</label>
+<label><input type="checkbox" class="check"> Test Mode Nuit</label>
+</div>`;
+
+document.getElementById("result").innerHTML = html;
+}
+</script>
+
+<div class="footer">
+Outil installation Tuya – Version PRO
+</div>
+
+</body>
+</html>
